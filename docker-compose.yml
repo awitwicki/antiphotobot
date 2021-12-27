@@ -1,0 +1,11 @@
+version: "3.3"
+services:
+  antiphotosbot:
+    build: .
+    image: antiphotosbot
+    volumes:
+      - ./data:/app/data
+    env_file:
+    - .env
+    container_name: antiphotosbot-container
+    restart: always
