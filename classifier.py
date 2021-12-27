@@ -1,12 +1,12 @@
 import os
-import numpy as np
-
-import tensorflow as tf
 import time
+import numpy as np
+from PIL import Image
+import tflite_runtime.interpreter as tflite
 
 class PhotoСlassifier():
     def __init__(self, model_path: str = 'mobilenet2_screen_photo_predictor_rgb_v1.0_224.tflite'):
-        self.interpreter = tf.lite.Interpreter(model_path=model_path)
+        self.interpreter = tflite.Interpreter(model_path=model_path)
         self.interpreter.allocate_tensors()
 
         self.input_details = self.interpreter.get_input_details()
@@ -14,8 +14,8 @@ class PhotoСlassifier():
         self.input_index = self.interpreter.get_input_details()[0]["index"]
 
     def load_image(self, image_path: str):
-        image = tf.keras.preprocessing.image.load_img(image_path, target_size=(224, 224, 3))
-        image = [np.float32(image)]
+        image = Image.open(image_path).resize((224,224))
+        image = [np.array(image.getdata(), dtype=np.float32).reshape(image.size[0], image.size[1], 3)]
 
         self.interpreter.set_tensor(self.input_index, image)
 
