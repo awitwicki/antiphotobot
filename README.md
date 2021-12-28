@@ -32,7 +32,7 @@ docker-compose up -d
 ### Python
 
 ```
-cd app/
 pip3 install -r requirements.txt
+pip3 install --extra-index-url https://google-coral.github.io/py-repo/ tflite_runtime
 python main.py
 ```
