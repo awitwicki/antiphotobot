@@ -14,7 +14,7 @@ class PhotoСlassifier():
         self.input_index = self.interpreter.get_input_details()[0]["index"]
 
     def load_image(self, image_path: str):
-        image = Image.open(image_path).resize((224,224))
+        image = Image.open(image_path).convert('RGB').resize((224,224))
         image = [np.array(image.getdata(), dtype=np.float32).reshape(image.size[0], image.size[1], 3)]
 
         self.interpreter.set_tensor(self.input_index, image)
