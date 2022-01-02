@@ -48,6 +48,18 @@ async def google(message: types.Message):
 
 @dp.message_handler(white_list_chats(), ignore_old_messages(), content_types=types.ContentType.PHOTO)
 async def photo_handle(message: types.Document):
+    # Check photo size
+    image_height = message.photo[-1].height
+    image_width = message.photo[-1].width
+
+    # Ignore small images
+    if image_height < 100 or image_width < 100:
+        return
+
+    # Ignore not square-like images
+    if image_width / image_height > 2 or image_height / image_width > 2:
+        return
+
     # Download photo
     photo_name = await download_file(message)
 
