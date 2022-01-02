@@ -5,7 +5,7 @@ from PIL import Image
 import tflite_runtime.interpreter as tflite
 
 class PhotoСlassifier():
-    def __init__(self, model_path: str = 'mobilenet2_screen_photo_predictor_rgb_v1.0_224.tflite'):
+    def __init__(self, model_path: str = 'mobilenet2_image_photo_predictor_rgb_v1.0_224.tflite'):
         self.interpreter = tflite.Interpreter(model_path=model_path)
         self.interpreter.allocate_tensors()
 
