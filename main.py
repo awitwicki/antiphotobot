@@ -60,6 +60,9 @@ async def photo_handle(message: types.Document):
     if image_width / image_height > 2 or image_height / image_width > 2:
         return
 
+    # TODO
+    # Crop center rectangle
+
     # Download photo
     photo_name = await download_file(message)
 
@@ -75,7 +78,7 @@ async def photo_handle(message: types.Document):
 
         advice_reply = 'Фото монитора в чате, всем беречь глаза!\nПожалуйста, делайте скриншоты, а не фотографируйте свои мониторы!\n\n#фотомонитора'
         keyboard = types.InlineKeyboardMarkup()
-        keyboard.add(types.InlineKeyboardButton(text="Простой способ сделать скриншот, нужно всеголишь...", url="https://remontka.pro/screenshot-windows-10/"))
+        keyboard.add(types.InlineKeyboardButton(text="Простой способ сделать скриншот, нужно всеголишь...", url="https://github.com/awitwicki/antiphotobot/blob/main/info.md"))
 
         msg = await bot.send_message(chat_id, text=advice_reply, reply_to_message_id=message.message_id, reply_markup=keyboard)
 
