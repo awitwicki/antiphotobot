@@ -42,7 +42,7 @@ async def download_file(message: types.Document) -> str:
 
 @dp.message_handler(white_list_chats(), ignore_old_messages(), commands=['start'])
 async def google(message: types.Message):
-    reply_text = "Привет, добавь меня в свой чат и я буду следить чтобы группа всегда была защищена от фото монитора\nЯ уж научу людей делать скриншоты."
+    reply_text = "Привіт, додай мене в свій чат і я слідкуватиму щоб захистити групу від фото монітора\nЯ навчу людей робити скріншоти."
     msg = await bot.send_message(message.chat.id, text=reply_text, reply_to_message_id=message.message_id, parse_mode=ParseMode.MARKDOWN)
 
 
@@ -76,9 +76,9 @@ async def photo_handle(message: types.Document):
         # Send warn
         chat_id = message.chat.id
 
-        advice_reply = 'Фото монитора в чате, всем беречь глаза!\nПожалуйста, делайте скриншоты, а не фотографируйте свои мониторы!\n\n#фотомонитора'
+        advice_reply = 'Фото монітора в чаті, бережіть очі!\nБудь ласка, робіть скріншоти, а не фотографії монітора!\n\n#фотомонітора'
         keyboard = types.InlineKeyboardMarkup()
-        keyboard.add(types.InlineKeyboardButton(text="Простой способ сделать скриншот, нужно всеголишь...", url="https://github.com/awitwicki/antiphotobot/blob/main/info.md"))
+        keyboard.add(types.InlineKeyboardButton(text="Щоб зробити скріншот потрібно тільки...", url="https://github.com/awitwicki/antiphotobot/blob/main/info.md"))
 
         msg = await bot.send_message(chat_id, text=advice_reply, reply_to_message_id=message.message_id, reply_markup=keyboard)
 
