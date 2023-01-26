@@ -5,7 +5,6 @@ import uuid
 from aiogram import Bot, types, executor
 from aiogram.dispatcher import Dispatcher
 from aiogram.types import ParseMode
-# from aiogram.types.message import Message
 from aiogram.dispatcher.filters import Filter
 
 from classifier import PhotoСlassifier
@@ -43,7 +42,7 @@ async def download_file(message: types.Document) -> str:
 @dp.message_handler(white_list_chats(), ignore_old_messages(), commands=['start'])
 async def google(message: types.Message):
     reply_text = "Привіт, додай мене в свій чат і я слідкуватиму щоб захистити групу від фото монітора\nЯ навчу людей робити скріншоти."
-    msg = await bot.send_message(message.chat.id, text=reply_text, reply_to_message_id=message.message_id, parse_mode=ParseMode.MARKDOWN)
+    await bot.send_message(message.chat.id, text=reply_text, reply_to_message_id=message.message_id, parse_mode=ParseMode.MARKDOWN)
 
 
 @dp.message_handler(white_list_chats(), ignore_old_messages(), content_types=types.ContentType.PHOTO)
@@ -80,10 +79,10 @@ async def photo_handle(message: types.Document):
         keyboard = types.InlineKeyboardMarkup()
         keyboard.add(types.InlineKeyboardButton(text="Щоб зробити скріншот потрібно тільки...", url="https://github.com/awitwicki/antiphotobot/blob/main/info.md"))
 
-        msg = await bot.send_message(chat_id, text=advice_reply, reply_to_message_id=message.message_id, reply_markup=keyboard)
+        await bot.send_message(chat_id, text=advice_reply, reply_to_message_id=message.message_id, reply_markup=keyboard)
 
 
 if __name__ == '__main__':
     dp.bind_filter(white_list_chats)
     dp.bind_filter(ignore_old_messages)
-    executor.start_polling(dp, on_startup=print(f"Bot is started."))
+    executor.start_polling(dp)
