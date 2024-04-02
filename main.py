@@ -1,6 +1,7 @@
 from datetime import datetime
 import os
 import uuid
+import hashlib
 
 from aiogram import Bot, types, executor
 from aiogram.dispatcher import Dispatcher
@@ -9,16 +10,29 @@ from aiogram.dispatcher.filters import Filter
 
 from classifier import PhotoСlassifier
 
-bot_token = os.getenv('ANTIPHOTOSBOT_TELEGRAM_TOKEN')
+input_path = 'data/input'
+images_path = 'data/images'
+photos_path = 'data/photos'
+
+bot_token = os.getenv('ANTIPHOTOSBOT_TELEGRAM_TOKEN', '')
 whitelist_chats = os.getenv('KARMABOT_ALLOWED_CHATS', '')
 
 whitelist_chats: list = None if whitelist_chats == '' else [int(chat) for chat in whitelist_chats.split(',')]
-
 
 bot: Bot = Bot(token=bot_token)
 dp: Dispatcher = Dispatcher(bot)
 photoСlassifier: PhotoСlassifier = PhotoСlassifier()
 
+def calculate_hash(f):
+    hash_md5 = hashlib.md5()
+    # with open(file, "rb") as f:
+    for chunk in iter(lambda: f.read(4096), b""):
+        hash_md5.update(chunk)
+    return hash_md5.hexdigest()
+
+def build_file_name(file):
+    file_hash = calculate_hash(file)
+    return f"{file_hash}.jpg"
 
 class ignore_old_messages(Filter):
     async def check(self, message: types.Message):
@@ -32,12 +46,43 @@ class white_list_chats(Filter):
         return True
 
 
-async def download_file(message: types.Document) -> str:
+async def download_file(message: types.Document, path: str) -> str:
     photo_name = f'data/images/{uuid.uuid1()}.jpg'
     file_info = await bot.get_file(message.photo[-2].file_id)
     await bot.download_file(file_info.file_path, photo_name)
     return photo_name
 
+async def check_image_for_is_photo(message) -> bool:   
+    file_info = await bot.get_file(message.photo[-1].file_id)
+    print(file_info.file_path)
+    photo_file = await bot.download_file(file_info.file_path)
+
+    im_name = build_file_name(photo_file)
+
+    # Check if image already exists
+    if_classified_image_exists = os.path.exists(f'{images_path}/{im_name}')
+    if_classified_photo_exists = os.path.exists(f'{photos_path}/{im_name}')
+
+    if not (if_classified_image_exists or if_classified_photo_exists):
+        # Save the photo to disk with hash as filename
+        photo_name = f'{input_path}/{im_name}'
+        photo_file.seek(0)
+        with open(photo_name, "wb") as f:
+            f.write(photo_file.read())
+
+        # Predict photo
+        is_photo = photoСlassifier.is_photo(photo_name)
+        
+        # Move photo to direct folder
+        if is_photo:
+            new_photo_name = photo_name.replace(input_path, photos_path)
+        else:
+            new_photo_name = photo_name.replace(input_path, images_path)
+        os.rename(photo_name, new_photo_name)
+    else:
+        is_photo = if_classified_photo_exists
+        
+    return is_photo
 
 @dp.message_handler(white_list_chats(), ignore_old_messages(), commands=['start'])
 async def google(message: types.Message):
@@ -62,16 +107,9 @@ async def photo_handle(message: types.Document):
     # TODO
     # Crop center rectangle
 
-    # Download photo
-    photo_name = await download_file(message)
+    is_photo = await check_image_for_is_photo(message)
 
-    # Predict photo
-    is_photo = photoСlassifier.is_photo(photo_name)
     if is_photo:
-        # Move photo to direct folder
-        new_photo_name = photo_name.replace('data/images/', 'data/photos/')
-        os.rename(photo_name, new_photo_name)
-
         # Send warn
         chat_id = message.chat.id
 
