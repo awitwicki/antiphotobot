@@ -132,3 +132,4 @@ data/images/*.jpg
 data/photos/*.jpg
 
 .idea
+_*
