@@ -23,7 +23,7 @@ bot: Bot = Bot(token=bot_token)
 dp: Dispatcher = Dispatcher(bot)
 photoСlassifier: PhotoСlassifier = PhotoСlassifier()
 
-# TODO rework to "message.photo[-1].file_unique_id"
+
 def calculate_hash(file_path: str):
     hash_md5 = hashlib.md5()
     with open(file_path, "rb") as f:
