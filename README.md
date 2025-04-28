@@ -15,24 +15,23 @@ Use next environment variables:
 
 * `ANTIPHOTOSBOT_ALLOWED_CHATS=-10010101,-10000101010` - whitelist chats. If it empty or not added to envs, whitelist mode will be turned off.
 
+* `MINIO_ROOT_USER, MINIO_ROOT_PASSWORD` credentials for minio server
+
+* `MINIO_ACCESS_KEY MINIO_SECRET_KEY` - log in into minio panel, create new access key and secret key, and add it to envs.
+
 **Python:** Add to system environment that variables.
 
 **Docker compose:**  create `.env` file and fill it with that variables.
 
 ## Run
 
-### Docker compose
-
 Then run in console command:
 
-```
-docker-compose up -d
-```
+1. `docker-compose up` Run in docker container
+2. Open `http://localhost:9000` log in to minio and create new access key
+3. Add it to .env file
+4. Restart docker container
 
-### Python
 
-```
-pip3 install -r requirements.txt
-pip3 install --extra-index-url https://google-coral.github.io/py-repo/ tflite_runtime
-python main.py
-```
+
+

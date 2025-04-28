@@ -3,3 +3,4 @@ cachetools==5.4.0
 pillow==10.4.0
 tflite-runtime==2.14.0
 numpy==1.26.4
+minio==7.2.15

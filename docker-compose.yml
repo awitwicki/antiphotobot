@@ -6,6 +6,30 @@ services:
     volumes:
       - ./data:/app/data
     env_file:
-    - .env
+      - .env
     container_name: antiphotosbot-container
-    restart: always
+    restart: unless-stopped
+    networks:
+      - kodzuverse
+
+  antiphotosbot-minio:
+    image: minio/minio
+    container_name: minio-container
+    restart: unless-stopped
+    command: server --console-address ":9001" /data
+    ports:
+      - "9001:9001"
+    env_file:
+      - .env
+    volumes:
+      - antiphotosbot-minio-data:/data
+    networks:
+      - kodzuverse
+
+volumes:
+    antiphotosbot-minio-data:
+
+networks:
+  kodzuverse:
+    name: kodzuverse_network
+    driver: bridge
