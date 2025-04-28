@@ -22,7 +22,7 @@ input_path = 'input'
 images_path = 'images'
 photos_path = 'photos'
 
-bot_token = os.getenv('ANTIPHOTOSBOT_TELEGRAM_TOKEN', '')
+bot_token = os.getenv('TELEGRAM_TOKEN', '')
 whitelist_chats_val = os.getenv('ANTIPHOTOSBOT_ALLOWED_CHATS', '')
 minio_endpoint = os.getenv('MINIO_ENDPOINT')
 minio_access_key = os.getenv('MINIO_ACCESS_KEY')

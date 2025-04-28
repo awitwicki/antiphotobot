@@ -9,7 +9,7 @@ Based on Aiogram and tensorflow
 
 Use next environment variables:
 
-* `ANTIPHOTOSBOT_TELEGRAM_TOKEN={YOUR_TOKEN}` - telegram token
+* `TELEGRAM_TOKEN={YOUR_TOKEN}` - telegram token
 
     (other variables is not necessary and have default values)
 
