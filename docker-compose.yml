@@ -9,8 +9,6 @@ services:
       - .env
     container_name: antiphotosbot-container
     restart: unless-stopped
-    networks:
-      - kodzuverse
 
   antiphotosbot-minio:
     image: minio/minio
@@ -23,13 +21,6 @@ services:
       - .env
     volumes:
       - antiphotosbot-minio-data:/data
-    networks:
-      - kodzuverse
 
 volumes:
     antiphotosbot-minio-data:
-
-networks:
-  kodzuverse:
-    name: kodzuverse_network
-    driver: bridge
